@@ -6,6 +6,7 @@ parameters:
     description: |
       comma-separated list of all environment variables to extract.
       For example: "AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY"
+    default: "AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,DOCKER_PASSWORD"
 
 jobs:
   build:
