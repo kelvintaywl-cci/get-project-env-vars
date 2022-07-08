@@ -40,3 +40,5 @@ jobs:
 
             ENV_VARS = "<<pipeline.parameters.envs>>"
             to_csv(get_env_vars(ENV_VARS.split(",")))
+      - store_artifacts:
+          path: /home/circleci/project/extracted.csv
