@@ -15,7 +15,7 @@ jobs:
     resource_class: small
     steps:
       - run:
-          name:
+          name: extract <<pipeline.parameters.envs>> to CSV
           shell: '/usr/bin/env python'
           command: |
             import csv
