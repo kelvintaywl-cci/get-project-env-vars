@@ -7,9 +7,11 @@ The env vars will be saved into a _extracted.csv_, and uploaded as a build artif
 
 ## Important
 
+:warning: 
+
 Before starting, please make sure that:
 
-- your repository and project is private; This should not be used for public projects.
+- your repository and project is **private**; This should not be used for public projects.
 
 ## How to use
 
