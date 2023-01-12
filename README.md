@@ -1,3 +1,4 @@
+
 # get-project-env-vars
 Extracting project environment variables (env vars) in CircleCI
 
@@ -9,9 +10,20 @@ The env vars will be saved into a _extracted.csv_, and uploaded as a build artif
 
 :warning: 
 
+### Disclaimer
+
+This is not an official tool, nor endorsed by CircleCI.
+In general, I would recommend users SSH into a build to extract the values, if possible.
+
+You can use [the Python script in here](https://github.com/kelvintaywl-cci/get-project-env-vars/blob/2c8874bcb78cde6c4f8b3da1d334a22a08e0b4b6/.circleci/config.yml#L21-L42) when inside the SSH session.
+
+### Prerequisites
+
 Before starting, please make sure that:
 
 - your repository and project is **private**; This should not be used for public projects.
+
+- you understand the risk that **anyone with read access** to your project can see the extracted CSV file.
 
 ## How to use
 
