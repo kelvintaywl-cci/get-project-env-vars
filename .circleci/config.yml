@@ -10,11 +10,13 @@ jobs:
   upstream:
     executor: base
     steps:
+      # NOTE: the $mock_crt_pem file content is based on example from https://www.herongyang.com/Cryptography/Certificate-Format-PEM-on-Certificates.html
+      # IMPORTANT: this content was multiline but when adding as a project env var, the newlines are not preserved.
       - run: |
           mkdir -p ./certs
           echo "${mock_crt_pem}" > ./certs/mock.pem
       - run: wc -l ./certs/mock.pem
-      - persist_workspace:
+      - persist_to_workspace:
           root: certs
           paths:
             - mock.pem
