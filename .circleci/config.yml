@@ -1,44 +1,34 @@
 version: 2.1
 
-parameters:
-  envs:
-    type: string
-    description: |
-      comma-separated list of all environment variables to extract.
-      For example: "AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY"
-    default: "AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,DOCKER_PASSWORD"
+executors:
+  base:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
 
 jobs:
-  build:
-    docker:
-      - image: cimg/python:3.10
-    resource_class: small
+  upstream:
+    executor: base
     steps:
-      - run:
-          name: extract <<pipeline.parameters.envs>> to CSV
-          shell: '/usr/bin/env python'
-          command: |
-            import csv
-            import os
-            from typing import List
+      - run: |
+          mkdir -p ./certs
+          echo "${mock_crt_pem}" > ./certs/mock.pem
+      - run: wc -l ./certs/mock.pem
+      - persist_workspace:
+          root: certs
+          paths:
+            - mock.pem
+  downstream:
+    executor: base
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: wc -l /tmp/workspace/mock.pem
 
-
-            def get_env_vars(keys: List[str]) -> List[dict]:
-                return [
-                    {"key": key, "value": os.environ[key]}
-                    for key in keys
-                ]
-                
-
-            def to_csv(env_vars: List[dict], out: str = "extracted.csv"):
-                with open(out, 'w') as outfile:
-                    w = csv.DictWriter(outfile, fieldnames=["key", "value"])
-                    w.writeheader()
-                    w.writerows(env_vars)
-                    print(f"[success] written to {out}")
-
-
-            ENV_VARS = "<<pipeline.parameters.envs>>"
-            to_csv(get_env_vars(ENV_VARS.split(",")))
-      - store_artifacts:
-          path: /home/circleci/project/extracted.csv
+workflows:
+  main:
+    jobs:
+      - upstream
+      - downstream:
+          requires:
+            - upstream
